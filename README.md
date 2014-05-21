@@ -1,3 +1,7 @@
+This is now deprecated in favor of ColorChain
+
+
+
 blockreader
 ===========
 
