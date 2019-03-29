@@ -45,7 +45,7 @@ def localblock(x):  #must have correct block file already opened
 def saveblock(x):
     global blocksdb,lastblockdb,blocksperfile
 
-    
+
 
     if(x%blocksperfile==0): #you need to erase the blockdb to write again
         blocksdb=[]
@@ -53,14 +53,14 @@ def saveblock(x):
     t=a['time']
     print datetime.datetime.fromtimestamp(int(t)).strftime('%Y-%m-%d %H:%M:%S')
     blocksdb.append(a)
-       
+
     whichdb='blocks'+str(int(x/blocksperfile))+'.txt'
-    
+
     with io.open(whichdb,'w',encoding='utf-8') as f:  #dump whatever you have in blocksdb
         f.write(unicode(json.dumps(blocksdb,ensure_ascii=False)))
         f.close()
     lastblockdb=x
-    
+
     with io.open('lastblockdb.txt','w',encoding='utf-8') as f:
         f.write(unicode(json.dumps(lastblockdb,ensure_ascii=False)))
 
@@ -73,12 +73,12 @@ def saveblock(x):
 def saveblock(x):
 
     whichdb='blocks'+str(int(x/blocksperfile))+'.txt' 
-    
+
     if(x==0):
         f=open(whichdb,'w') 
     else:
         f=open(whichdb,'a+')  #opens for appending and reading only
-    
+
     b=block(x)  #already returned as JSON object
     b2=json.dumps(b)  #non-json
     print str(x) + "    "+str(len(b2))
@@ -98,10 +98,10 @@ def saveblock(x):
     #print len(leaderstring) #to make sure its always 8
 
     f.close()
-    
 
-              
-        
+
+
+
 
 def loadblocks():
     global blocksdb,lastblockdb
@@ -123,7 +123,7 @@ def loadblocks():
         print a
         for x in adding:
             blocksdb.append(x)
-        
+
         a=a+1
         blockfilen.close()
 
@@ -149,7 +149,7 @@ def loadblockfile(x):
                 blk=blockfile.read(leader)
                 blk=json.loads(blk)
                 blocksdb.append(blk)
-        
+
 
         #stuff=json.load(blockfile)
         #for x in stuff:
@@ -158,7 +158,7 @@ def loadblockfile(x):
 
 def closeblockfile(x):
     x.close()
-        
+
 
 def saveblocks(startx,endx):
     x=startx
@@ -166,15 +166,15 @@ def saveblocks(startx,endx):
     while(x<endx+1):
         #print x
         r=saveblock(x)
-        
+
         if(r==False):
             x=endx+1
-        
+
         x=x+1
 
 
 
-    
+
 def throughput(blockn):
     a=localblock(blockn)
     global addresses, through
@@ -196,8 +196,8 @@ def throughput(blockn):
             else:
                 placeinlist(iaddr,-1*r,addresses)
                 placeinlist(iamt,-1*r,through)
-        
-    
+
+
 
 
 def transactions_in_block(x, local):
@@ -215,7 +215,7 @@ def transactions_in_block(x, local):
     for x in d['tx']:
         totaltx=totaltx+1
         ins=x['inputs']
-        
+
         t=0
         g=x['out']
         sumbtc=0
@@ -226,7 +226,7 @@ def transactions_in_block(x, local):
                 giverplace=findinlist(giveraddress,address_list)
                 if(giveramt<50):
                     jj=1
-                    
+
                 if(giverplace<0):  #add new entry
                     giverplace=giverplace*-1
                     placeinlist(giveraddress,giverplace,address_list)
@@ -236,8 +236,8 @@ def transactions_in_block(x, local):
                     newamt=btc_list[giverplace]+giveramt
                     btc_list[giverplace]=newamt
                     #placeinlist(newamt,giverplace,btc_list)
-            
-       
+
+
         for y in ins:
             if(len(y)>0):
                 if blockn<129878:
@@ -248,7 +248,7 @@ def transactions_in_block(x, local):
                     receiveraddress=str(y['addr'])
                     receiveramt=float(y['value']/100000000)
                     receiverplace=findinlist(receiveraddress,address_list)
-            
+
                 if(receiverplace<0):
                    receiverplace=receiverplace*-1
                    placeinlist(receiveraddress,receiverplace,address_list)
@@ -263,7 +263,7 @@ def transactions_in_block(x, local):
     clear(1000)
 
     return hhh
-            
+
 def placeinlist(x,n,list):      # 0th position is still a position
     b=len(list)
     if(b>0):
@@ -272,7 +272,7 @@ def placeinlist(x,n,list):      # 0th position is still a position
         a=b-1
         while(a>=n):
             list[a+1]=list[a]
-            
+
             a=a-1
 
         a=a+1
@@ -310,7 +310,7 @@ def findinlist(x,list):
             g=g+1
             a=(lowerbound+upperbound)/2
             hexa=int(str(list[a]).encode("hex"),32)
-            
+
             if(h==hexa):
                 cont=False
             elif(upperbound-lowerbound<2 and h>hexa):
@@ -319,22 +319,22 @@ def findinlist(x,list):
             elif(upperbound-lowerbound<2 and h<hexa):
                 cont=False
                 a=-lowerbound
-            
+
             elif(h<hexa):
-                
+
                 upperbound=a
-                                
+
             elif(h>hexa):
-                
+
                 lowerbound=a
             elif(g>math.log(b,2)*3):
                 cont=False
                 a=-1
-            
-                
-              
 
-                
+
+
+
+
     return a
 
 
@@ -343,7 +343,7 @@ x=0
 while (x<20):
     x=x+1
     c.append(x*x)
-    
+
 d=[0]*371
 
 a=0
@@ -352,11 +352,11 @@ while a<371:
     for x in c:
         if(x==a):
             d[a]=d[a]+1
-    
+
     a=a+1
-    
+
 import datetime
-    
+
 def blocks(startblock,endblock, local):   #now opens and closes blockdbfiles dynamically
     s=time.time()
     a=startblock
@@ -375,12 +375,12 @@ def blocks(startblock,endblock, local):   #now opens and closes blockdbfiles dyn
             print "should start"
             j=a/blocksperfile
             first=loadblockfile(j)
-            
+
         k=transactions_in_block(a,local)
         #clear(100)
         startingnew=False
         #print len(blocksdb)
-        
+
         t=(datetime.datetime.fromtimestamp(int(k)).strftime('%Y-%m-%d %H:%M:%S'))
         print "Block: "+str(a)+"     "+str(t)
         lastblock=a
@@ -411,22 +411,22 @@ def save():
 
 def load():
     global address_list,btc_list,lastblock
-    
+
     btcfile=open("btc.txt")
     addressfile=open("addresses.txt")
     blockfile=open("lastblock.txt")
-    
+
     btc_list=json.load(btcfile)
     address_list=json.load(addressfile)
     lastblock=json.load(blockfile)
-    
+
     blockfile.close()
     btcfile.close()
     addressfile.close()
 
     print "Last Block: "+str(lastblock)
     print "Number of Addresses: "+str(len(address_list)-1)
-    
+
 def check():
     s=0
     a=0
@@ -435,7 +435,7 @@ def check():
         s=s+btc_list[a]
         if(btc_list[a]<-1*0.0000001):
             ok=False
-            
+
             print "member "+str(address_list[a])+" has "+str(btc_list[a])
             a=len(btc_list)
         a=a+1
@@ -447,7 +447,7 @@ def check():
 def clear(n):
     a=0
     b=0
-    
+
     global btc_list,address_list
     while(a<len(btc_list) and b<n):
         if(btc_list[a]==0):
@@ -455,7 +455,7 @@ def clear(n):
             del address_list[a]
             b=b+1
             #print str(a)+"    number cleared: "+str(b)
-            
+
             #btc_list=removefromlist(a,btc_list)
             #address_list=removefromlist(a,address_list)
         a=a+1
@@ -476,20 +476,20 @@ colorbtc=[]
 coloraddress=[]
 """
 def color_tx_in_block(x, local):
-    
+
     if(local):
         g=len(blocksdb)
         if(x<g):
             d=localblock(x)
     else:
         d=block(x)
-        
+
     hhh=d['time']
-    
+
     for x in d['tx']:
-        
+
         ins=x['inputs']
-        
+
         t=0
         g=x['out']
         sumbtc=0
@@ -506,8 +506,8 @@ def color_tx_in_block(x, local):
                     senderamount=0
 
                 if(senderamount>0):
-                    
-                          
+
+
                 if(receiverplace<0):
                    receiverplace=receiverplace*-1
                    placeinlist(receiveraddress,receiverplace,address_list)
@@ -519,7 +519,7 @@ def color_tx_in_block(x, local):
                 #print "taking   "+str(receiverplace)+"  "+receiveraddress+"   "+str(address_list[receiverplace])+"  "+str(receiveramt)
                 #print str(y['prev_out']['addr'])+"   "+str(y['prev_out']['value'])
 
-        
+
         for f in g:
             if(f['type']>-1):
                 giveraddress=str(f['addr'])
@@ -527,7 +527,7 @@ def color_tx_in_block(x, local):
                 giverplace=findinlist(giveraddress,address_list)
                 if(giveramt<50):
                     jj=1
-                    
+
                 if(giverplace<0):  #add new entry
                     giverplace=giverplace*-1
                     placeinlist(giveraddress,giverplace,address_list)
@@ -537,9 +537,9 @@ def color_tx_in_block(x, local):
                     newamt=btc_list[giverplace]+giveramt
                     btc_list[giverplace]=newamt
                     #placeinlist(newamt,giverplace,btc_list)
-            
-       
-        
+
+
+
     return hhh
 """
 
@@ -559,13 +559,13 @@ def loadblockinfile(file):  #you need to be in the correct place in the file alr
         bits=file.read(4)
         nonce=file.read(4)
 
-        
+
 
         print "header length: "+ str(convert_to_int(headerlength))
         #print "previous block hash: "+str(convert_to_int(previousblockhash))
         print "timestamp: "+str(convert_to_int(timestamp))
         print "nonce: "+str(convert_to_int(nonce))
-    
+
 
 def convert_to_int(x):
     g=len(x)
@@ -590,7 +590,7 @@ class address_tx:
         self.throughput=0
         self.inputs=0
         self.outputs=0
- 
+
 
 
 class tx:
@@ -617,8 +617,8 @@ def findaddress(addr):
         if(addresses[a].addr==addr):
             r=a
             a=len(addresses)
-            
-        
+
+
         a=a+1
 
     return r
@@ -640,11 +640,11 @@ def tx_in_block(blockn):
 
         t=tx()
         t.inblock=blockn
-        
+
         for inputters in c: #inputters first
 
             if(len(inputters)>0):
-                
+
                 amt=float(inputters['prev_out']['value'])/100000000
                 addr=inputters['prev_out']['addr']
                 tempins.append(addr)
@@ -669,7 +669,7 @@ def tx_in_block(blockn):
         for outputters in d:
 
             if(len(outputters)>0):
-                
+
                 amt=float(outputters['value'])/100000000
                 addr=outputters['addr']
 
@@ -679,7 +679,7 @@ def tx_in_block(blockn):
                         ok=False
 
                 if ok:
-                    
+
                     t.outputs.append(addr)
                     t.outamts.append(amt)
 
@@ -695,7 +695,7 @@ def tx_in_block(blockn):
                     else:
                         addresses[po].throughput=addresses[po].throughput+amt
                         addresses[po].outputs=addresses[po].outputs+amt
-                    
+
         transactions.append(t)
 
 
@@ -729,11 +729,11 @@ def sortlists(): #dumb way
         boolist[bestplace]=False
     addresses=templist
 
-    
+
 
 def draw_addresses():
     #addresses should be found and sorted by now
-    
+
     maxn=1000
 
     n=len(addresses)
@@ -750,7 +750,7 @@ def draw_addresses():
     polar=0
     radiusincrement=.5
     polarincrement=15
-    
+
     for addre in addresses:
 
         radius=radius+1
@@ -762,13 +762,13 @@ def draw_addresses():
             y[a]=math.sin(polar*math.pi/180)*radius
 
             areas[a]=addre.throughput
-    
+
         a=a+1
-        
+
     global fromcoordinates, tocoordinates
     fromcoordinates=np.zeros([len(transactions),2])
     tocoordinates=np.zeros([len(transactions),2])
-    
+
     d=0
     for tx in transactions:
         if tx.inamts>0:
@@ -782,8 +782,8 @@ def draw_addresses():
                 tocoordinates[d][1]=y[toplace]
                 d=d+1
 
-        
-        
+
+
 
     #normalize areas
     t=0
@@ -811,14 +811,14 @@ def draw_addresses():
 
 
     #LINES
-   
-   
+
+
 
 
     plt.show()
-    
 
-        
+
+
 #tx_in_block(100000)
 #sortlists()
 #draw_addresses()
