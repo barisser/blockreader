@@ -75,9 +75,9 @@ def saveblock(x):
     whichdb='blocks'+str(int(x/blocksperfile))+'.txt' 
     
     if(x==0):
-        f=open(whichdb,'w') 
+        f=open(whichdb, 'w') 
     else:
-        f=open(whichdb,'a+')  #opens for appending and reading only
+        f=open(whichdb, 'a+')  #opens for appending and reading only
     
     b=block(x)  #already returned as JSON object
     b2=json.dumps(b)  #non-json
@@ -104,7 +104,7 @@ def saveblock(x):
         
 
 def loadblocks():
-    global blocksdb,lastblockdb
+    global blocksdb, lastblockdb
     blocksdb=[]
     lastblockdbfile=open("lastblockdb.txt")
     lastblockdb=json.load(lastblockdbfile)
@@ -160,7 +160,7 @@ def closeblockfile(x):
     x.close()
         
 
-def saveblocks(startx,endx):
+def saveblocks(startx, endx):
     x=startx
     global lastblockdb
     while(x<endx+1):
@@ -190,12 +190,12 @@ def throughput(blockn):
             iaddr=i['addr']
             iamt=i['value']/100000000
 
-            r=findinlist(iaddr,addresses)
+            r=findinlist(iaddr, addresses)
             if(r>0):
                 through[r]=through[r]+iamt
             else:
-                placeinlist(iaddr,-1*r,addresses)
-                placeinlist(iamt,-1*r,through)
+                placeinlist(iaddr, -1*r, addresses)
+                placeinlist(iamt, -1*r, through)
         
     
 
@@ -223,14 +223,14 @@ def transactions_in_block(x, local):
             if(f['type']>-1):
                 giveraddress=str(f['addr'])
                 giveramt=float(f['value'])/100000000
-                giverplace=findinlist(giveraddress,address_list)
+                giverplace=findinlist(giveraddress, address_list)
                 if(giveramt<50):
                     jj=1
                     
                 if(giverplace<0):  #add new entry
                     giverplace=giverplace*-1
-                    placeinlist(giveraddress,giverplace,address_list)
-                    placeinlist(giveramt,giverplace,btc_list)
+                    placeinlist(giveraddress, giverplace, address_list)
+                    placeinlist(giveramt, giverplace, btc_list)
                     #print str(giverplace)+ "  "+giveraddress+"  "+str(giveramt)
                 else:
                     newamt=btc_list[giverplace]+giveramt
@@ -243,16 +243,16 @@ def transactions_in_block(x, local):
                 if blockn<129878:
                     receiveraddress=str(y['prev_out']['addr'])
                     receiveramt=float(y['prev_out']['value'])/100000000
-                    receiverplace=findinlist(receiveraddress,address_list)
+                    receiverplace=findinlist(receiveraddress, address_list)
                 else:
                     receiveraddress=str(y['addr'])
                     receiveramt=float(y['value']/100000000)
-                    receiverplace=findinlist(receiveraddress,address_list)
+                    receiverplace=findinlist(receiveraddress, address_list)
             
                 if(receiverplace<0):
                    receiverplace=receiverplace*-1
-                   placeinlist(receiveraddress,receiverplace,address_list)
-                   placeinlist(-1*receiveramt,receiverplace,btc_list)
+                   placeinlist(receiveraddress, receiverplace, address_list)
+                   placeinlist(-1*receiveramt, receiverplace, btc_list)
                 else:
                     newamt=btc_list[receiverplace]-receiveramt
                     btc_list[receiverplace]=newamt
@@ -264,7 +264,7 @@ def transactions_in_block(x, local):
 
     return hhh
             
-def placeinlist(x,n,list):      # 0th position is still a position
+def placeinlist(x, n, list):      # 0th position is still a position
     b=len(list)
     if(b>0):
         list.append(list[b-1])
@@ -281,7 +281,7 @@ def placeinlist(x,n,list):      # 0th position is still a position
         list.append(x)
 
 
-def removefromlist(n,list):
+def removefromlist(n, list):
     a=0
     list2=[]
     b=len(list)
@@ -294,7 +294,7 @@ def removefromlist(n,list):
 
     return list2
 
-def findinlist(x,list):
+def findinlist(x, list):
     b=len(list)
     a=-1
     if(b>0):
@@ -302,14 +302,14 @@ def findinlist(x,list):
         upperbound=b
         a=(lowerbound+upperbound)/2
         p=b
-        h=int(str(x).encode("hex"),32)
+        h=int(str(x).encode("hex"), 32)
         depth=0
         g=0
         cont=True
         while(cont):
             g=g+1
             a=(lowerbound+upperbound)/2
-            hexa=int(str(list[a]).encode("hex"),32)
+            hexa=int(str(list[a]).encode("hex"), 32)
             
             if(h==hexa):
                 cont=False
@@ -327,7 +327,7 @@ def findinlist(x,list):
             elif(h>hexa):
                 
                 lowerbound=a
-            elif(g>math.log(b,2)*3):
+            elif(g>math.log(b, 2)*3):
                 cont=False
                 a=-1
             
@@ -357,7 +357,7 @@ while a<371:
     
 import datetime
     
-def blocks(startblock,endblock, local):   #now opens and closes blockdbfiles dynamically
+def blocks(startblock, endblock, local):   #now opens and closes blockdbfiles dynamically
     s=time.time()
     a=startblock
     global lastblock, blocksdb
@@ -376,7 +376,7 @@ def blocks(startblock,endblock, local):   #now opens and closes blockdbfiles dyn
             j=a/blocksperfile
             first=loadblockfile(j)
             
-        k=transactions_in_block(a,local)
+        k=transactions_in_block(a, local)
         #clear(100)
         startingnew=False
         #print len(blocksdb)
@@ -401,16 +401,16 @@ def save():
     #btcfile=open("btc.txt","wb")
     #addressfile=open("addresses.txt","wb")
 
-    with io.open('btc.txt','w',encoding='utf-8') as f:
-        f.write(unicode(json.dumps(btc_list,ensure_ascii=False)))
-    with io.open('addresses.txt','w',encoding='utf-8') as f:
-        f.write(unicode(json.dumps(address_list,ensure_ascii=False)))
-    with io.open('lastblock.txt','w',encoding='utf-8') as f:
-        f.write(unicode(json.dumps(lastblock,ensure_ascii=False)))
+    with io.open('btc.txt', 'w', encoding='utf-8') as f:
+        f.write(unicode(json.dumps(btc_list, ensure_ascii=False)))
+    with io.open('addresses.txt', 'w', encoding='utf-8') as f:
+        f.write(unicode(json.dumps(address_list, ensure_ascii=False)))
+    with io.open('lastblock.txt', 'w', encoding='utf-8') as f:
+        f.write(unicode(json.dumps(lastblock, ensure_ascii=False)))
 
 
 def load():
-    global address_list,btc_list,lastblock
+    global address_list, btc_list, lastblock
     
     btcfile=open("btc.txt")
     addressfile=open("addresses.txt")
@@ -448,7 +448,7 @@ def clear(n):
     a=0
     b=0
     
-    global btc_list,address_list
+    global btc_list, address_list
     while(a<len(btc_list) and b<n):
         if(btc_list[a]==0):
             del btc_list[a]
@@ -547,7 +547,7 @@ def color_tx_in_block(x, local):
 
 
 def loadblockinfile(file):  #you need to be in the correct place in the file already
-    global headerlength,versionnumber,previousblockhash, merkleroot, timestamp, bits, nonce
+    global headerlength, versionnumber, previousblockhash, merkleroot, timestamp, bits, nonce
     if(not file.read(4)=='\xf9\xbe\xb4\xd9'):
         return -1
     else:
@@ -569,7 +569,7 @@ def loadblockinfile(file):  #you need to be in the correct place in the file alr
 
 def convert_to_int(x):
     g=len(x)
-    f=struct.unpack("<"+str(g/4)+"i",x)
+    f=struct.unpack("<"+str(g/4)+"i", x)
     return f[0]
 
 
@@ -739,7 +739,7 @@ def draw_addresses():
     n=len(addresses)
     if(n>maxn):
         n=maxn
-    global x,y
+    global x, y
     x=np.zeros(n)
     y=np.zeros(n)
     areas=np.zeros(n)
@@ -766,8 +766,8 @@ def draw_addresses():
         a=a+1
         
     global fromcoordinates, tocoordinates
-    fromcoordinates=np.zeros([len(transactions),2])
-    tocoordinates=np.zeros([len(transactions),2])
+    fromcoordinates=np.zeros([len(transactions), 2])
+    tocoordinates=np.zeros([len(transactions), 2])
     
     d=0
     for tx in transactions:
@@ -798,7 +798,7 @@ def draw_addresses():
         #areas[q]=areas[q]/factor
         q=q+1
 
-    plt.scatter(x,y,s=areas)
+    plt.scatter(x, y, s=areas)
 
     j=0
     while j<len(fromcoordinates):
@@ -806,7 +806,7 @@ def draw_addresses():
         fy=fromcoordinates[j][1]
         ttx=tocoordinates[j][0]
         tty=tocoordinates[j][1]
-        plt.plot([fx,fy],[ttx,tty],lw=1)
+        plt.plot([fx, fy], [ttx, tty], lw=1)
         j=j+1
 
 
