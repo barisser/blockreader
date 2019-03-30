@@ -822,9 +822,3 @@ def draw_addresses():
 #tx_in_block(100000)
 #sortlists()
 #draw_addresses()
-
-
-
-
-
-
