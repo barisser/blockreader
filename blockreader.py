@@ -25,6 +25,7 @@ lastblockdbfile=open("lastblockdb.txt")
 lastblockdb=json.load(lastblockdbfile)
 lastblockdbfile.close()
 
+
 def block(x):
     a=requests.get("https://blockchain.info/block-height/"+str(x)+"?format=json")
 
@@ -37,6 +38,7 @@ def block(x):
                 #is main chain block, interpret
 
                 return x
+
 
 def localblock(x):  #must have correct block file already opened
     a=x%blocksperfile
@@ -70,6 +72,8 @@ def saveblock(x):
         return True
 
 """
+
+
 def saveblock(x):
 
     whichdb='blocks'+str(int(x/blocksperfile))+'.txt' 
@@ -130,6 +134,7 @@ def loadblocks():
 
     print "Last Block in DB: "+str(lastblockdb)
 
+
 def loadblockfile(x):
     global blocksdb, lastblockdb, blockfile
     blocksdb=[]
@@ -155,6 +160,7 @@ def loadblockfile(x):
         #for x in stuff:
         #    blocksdb.append(x)
     return blockfile
+
 
 def closeblockfile(x):
     x.close()
@@ -264,6 +270,7 @@ def transactions_in_block(x, local):
 
     return hhh
             
+
 def placeinlist(x, n, list):      # 0th position is still a position
     b=len(list)
     if(b>0):
@@ -293,6 +300,7 @@ def removefromlist(n, list):
         a=a+1
 
     return list2
+
 
 def findinlist(x, list):
     b=len(list)
@@ -357,6 +365,7 @@ while a<371:
     
 import datetime
     
+
 def blocks(startblock, endblock, local):   #now opens and closes blockdbfiles dynamically
     s=time.time()
     a=startblock
@@ -388,6 +397,7 @@ def blocks(startblock, endblock, local):   #now opens and closes blockdbfiles dy
     lastblock=endblock+1
     blocksdb=[]
     print time.time()-s
+
 
 def wallets():
     x=1
@@ -427,6 +437,7 @@ def load():
     print "Last Block: "+str(lastblock)
     print "Number of Addresses: "+str(len(address_list)-1)
     
+
 def check():
     s=0
     a=0
@@ -443,6 +454,7 @@ def check():
         #ok=False
         print str(s/lastblock)
     return ok
+
 
 def clear(n):
     a=0
@@ -580,6 +592,8 @@ addresses=[]  #for throughput
 inaddress=[]
 outaddress=[]  #out per address, indexed with addresses
 """
+
+
 class address_tx:
     addr=''
     throughput=0
@@ -609,6 +623,7 @@ class tx:
 
 addresses=[]
 transactions=[]
+
 
 def findaddress(addr):
     a=0
