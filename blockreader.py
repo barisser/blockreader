@@ -1,3 +1,4 @@
+import datetime
 import requests
 import json
 import encodings
@@ -363,7 +364,6 @@ while a<371:
     
     a=a+1
     
-import datetime
     
 
 def blocks(startblock, endblock, local):   #now opens and closes blockdbfiles dynamically
